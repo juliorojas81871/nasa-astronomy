@@ -2,9 +2,21 @@ import { getGalleryImages } from "@/lib/nasa-api";
 import { getViewedDates } from "@/lib/history-actions";
 import { GalleryCard } from "./components/GalleryCard";
 import { ClearHistoryButton } from "./components/ClearHistoryButton";
+import { cacheLife } from "next/cache";
 
 export default async function Home() {
   const viewedSet = await getViewedDates();
+
+  return (
+    <HomeContent viewedDates={[...viewedSet]} hasHistory={viewedSet.size > 0} />
+  );
+}
+
+async function HomeContent({ viewedDates, hasHistory }: { viewedDates: string[]; hasHistory: boolean }) {
+  "use cache";
+  cacheLife("days");
+
+  const viewedSet = new Set(viewedDates);
   let gallery;
 
   try {
@@ -24,7 +36,7 @@ export default async function Home() {
     <main className="max-w-5xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Astronomy Gallery</h1>
-        {viewedSet.size > 0 && <ClearHistoryButton />}
+        {hasHistory && <ClearHistoryButton />}
       </div>
       <div className="grid grid-cols-3 gap-4">
         {gallery.map((item) => (

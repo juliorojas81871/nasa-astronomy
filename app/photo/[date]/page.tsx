@@ -2,6 +2,7 @@ import { getImageByDate, SpaceImage } from "@/lib/nasa-api";
 import { ViewTracker } from "@/app/components/ViewTracker";
 import Image from "next/image";
 import Link from "next/link";
+import { cacheLife } from "next/cache";
 import { Suspense } from "react";
 import { z } from "zod";
 import { notFound } from "next/navigation";
@@ -9,6 +10,9 @@ import { notFound } from "next/navigation";
 const dateParam = z.iso.date();
 
 export default async function PhotoPage({ params }: { params: Promise<{ date: string }> }) {
+  "use cache";
+  cacheLife("days")
+
   const { date } = await params;
   const parsed = dateParam.safeParse(date);
   if (!parsed.success) notFound();
