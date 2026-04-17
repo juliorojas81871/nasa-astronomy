@@ -1,36 +1,16 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Project Q&A
 
-## Getting Started
+## 1. What challenges were you trying to solve?
+The biggest challenge was that the NASA API is unreliable and sometimes returns a 503. To handle this, I used caching to prevent empty responses and avoid showing broken pages due to lack of data.
 
-First, run the development server:
+## 2. What, if any, technical limitations were you working within?
+The main technical limitation was the NASA API's 1000 requests-per-hour limit, though it wasn't a major issue at this scale. The API also occasionally returns 503 errors, so I used Next.js caching to serve stale data rather than breaking the page.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 3. If you were collaborating with other developers, how did you separate the work?
+I would split the work by feature and developer strength. In this case, one developer would handle the API and cookie logic, a second would handle the UI, and a third would focus on QA.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 4. What did you enjoy about the project?
+I enjoyed that the project addressed a real-world problem rather than being just another LeetCode puzzle.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 5. What would you do differently if you could do it over?
+I would use ISR instead of SSR from the start. I added Next.js caching as a fix for the issues I had with the NASA API, but since the Picture of the Day only updates once a day, ISR would have been the correct architecture from the beginning.

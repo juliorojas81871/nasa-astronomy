@@ -5,6 +5,7 @@ import { z } from "zod";
 
 const COOKIE_KEY = "nasa-gallery-history";
 const dateListSchema = z.array(z.string());
+const MAX_HISTORY = 9;
 
 export async function getViewedDates(): Promise<Set<string>> {
   const store = await cookies();
@@ -21,9 +22,13 @@ export async function getViewedDates(): Promise<Set<string>> {
 
 export async function markAsViewed(date: string) {
   const store = await cookies();
-  const current = await getViewedDates();
-  current.add(date);
-  store.set(COOKIE_KEY, JSON.stringify([...current]), {
+  const history = await getViewedDates();
+  history.add(date);
+  const recentHistory = [...history]
+    .sort()
+    .slice(-MAX_HISTORY);
+
+  store.set(COOKIE_KEY, JSON.stringify(recentHistory), {
     maxAge: 60 * 60 * 24 * 90,
     path: "/",
   });
